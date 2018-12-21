@@ -2,6 +2,7 @@ import json
 import dbconnection
 from flask import Flask, request, Response, render_template, redirect, url_for,session,flash
 from functools import wraps
+import bcrypt
 app = Flask(__name__)
 
 users = []
@@ -104,6 +105,11 @@ def add_new_user():
     pword = str(user['password'])
     fname = str(user['firstname'])
     lname = str(user['lastname'])
+    
+    #If you want to encrypt password uncomment below 2 lines
+    #salt = bcrypt.gensalt()
+    #pword=bcrypt.hashpw(pword.encode('utf-8'),salt)
+
     cursor.execute('''INSERT INTO Users(Username, Password, Firstname, Lastname) VALUES(?, ?, ?, ?)''', (uname, pword, fname, lname))    
     dbconnection.db_conn.commit()
     dbconnection.db_conn.close_connection()
