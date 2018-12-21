@@ -9,14 +9,14 @@ users = []
 def init_list():
     
     users[:] = []
-    dbconnection.sqlite_connection.init_app(app)
-    cursor = dbconnection.sqlite_connection.get_cursor()
+    dbconnection.db_conn.init_app(app)
+    cursor = dbconnection.db_conn.get_cursor()
     cursor.execute('''SELECT * FROM Users''')
     for row in cursor:
         user = {"id":row[0], "username":row[1], "password":row[2], "firstname":row[3], "lastname":row[4]}
         users.append(user)
-    dbconnection.sqlite_connection.commit()
-    dbconnection.sqlite_connection.close_connection()
+    dbconnection.db_conn.commit()
+    dbconnection.db_conn.close_connection()
 
 def is_logged_in(f):
     @wraps(f)
@@ -44,13 +44,13 @@ def dashboard():
 # find user by id
 @app.route('/users/<id>')
 def edit_user(id):
-    dbconnection.sqlite_connection.init_app(app)
-    cursor = dbconnection.sqlite_connection.get_cursor()
+    dbconnection.db_conn.init_app(app)
+    cursor = dbconnection.db_conn.get_cursor()
     cursor.execute('''SELECT * FROM Users WHERE Id = ? ''', (id,))
     row = cursor.fetchone()
     user = {"id":row[0], "username":row[1], "password":row[2], "firstname":row[3], "lastname":row[4]}
-    dbconnection.sqlite_connection.commit()
-    dbconnection.sqlite_connection.close_connection()
+    dbconnection.db_conn.commit()
+    dbconnection.db_conn.close_connection()
     return render_template('user.html', user = user)
 
 # new user form
@@ -61,8 +61,8 @@ def new_user():
 @app.route('/signin',methods=['GET','POST'])
 def signin():
     
-    dbconnection.sqlite_connection.init_app(app)
-    cursor = dbconnection.sqlite_connection.get_cursor()
+    dbconnection.db_conn.init_app(app)
+    cursor = dbconnection.db_conn.get_cursor()
 
 
     if request.method == 'POST':
@@ -98,39 +98,39 @@ def signin():
 @app.route('/users/newuser/add', methods = ['POST'])
 def add_new_user():
     user = request.form
-    dbconnection.sqlite_connection.init_app(app)
-    cursor = dbconnection.sqlite_connection.get_cursor()
+    dbconnection.db_conn.init_app(app)
+    cursor = dbconnection.db_conn.get_cursor()
     uname = str(user['username'])
     pword = str(user['password'])
     fname = str(user['firstname'])
     lname = str(user['lastname'])
     cursor.execute('''INSERT INTO Users(Username, Password, Firstname, Lastname) VALUES(?, ?, ?, ?)''', (uname, pword, fname, lname))    
-    dbconnection.sqlite_connection.commit()
-    dbconnection.sqlite_connection.close_connection()
+    dbconnection.db_conn.commit()
+    dbconnection.db_conn.close_connection()
     return redirect(url_for('get_users'))
 
 # update user information
 @app.route('/users/update', methods = ['PUT', 'POST'])
 def update_user():
     user = request.form
-    dbconnection.sqlite_connection.init_app(app)
-    cursor = dbconnection.sqlite_connection.get_cursor()
+    dbconnection.db_conn.init_app(app)
+    cursor = dbconnection.db_conn.get_cursor()
     uname = str(user['username'])
     pword = str(user['password'])
     fname = str(user['firstname'])
     lname = str(user['lastname'])
     cursor.execute('''UPDATE Users SET Username = ?, Password = ?, Firstname = ?, Lastname = ? WHERE Id = ? ''', (uname, pword, fname, lname, user['id']))
-    dbconnection.sqlite_connection.commit()
-    dbconnection.sqlite_connection.close_connection()
+    dbconnection.db_conn.commit()
+    dbconnection.db_conn.close_connection()
     return redirect(url_for('get_users'))
 
 @app.route('/users/delete', methods = ['DELETE', 'POST'])
 def delete_user():
     user = request.form
-    dbconnection.sqlite_connection.init_app(app)
-    dbconnection.sqlite_connection.connection.execute('''DELETE FROM Users WHERE Id = ? ''', (user['id'],))
-    dbconnection.sqlite_connection.commit()
-    dbconnection.sqlite_connection.close_connection()
+    dbconnection.db_conn.init_app(app)
+    dbconnection.db_conn.connection.execute('''DELETE FROM Users WHERE Id = ? ''', (user['id'],))
+    dbconnection.db_conn.commit()
+    dbconnection.db_conn.close_connection()
     return redirect(url_for('get_users'))
 
 # for easy routing
@@ -153,48 +153,48 @@ def get_users_json():
 
 @app.route('/users/json/<username>')
 def get_user_json(username):
-    dbconnection.sqlite_connection.init_app(app)
-    cursor = dbconnection.sqlite_connection.get_cursor()
+    dbconnection.db_conn.init_app(app)
+    cursor = dbconnection.db_conn.get_cursor()
     cursor.execute('''SELECT * FROM Users WHERE Username = ? ''', (username,))
-    dbconnection.sqlite_connection.commit()
+    dbconnection.db_conn.commit()
     row = cursor.fetchone()
     return json.dumps({"id":row[0], "username":row[1], "password":row[2], "firstname":row[3], "lastname":row[4]}, indent=True)
 
 @app.route('/users/json/add', methods = ['POST'])
 def add_new_user_json():
     user = request.get_json(force=True)
-    dbconnection.sqlite_connection.init_app(app)
-    cursor = dbconnection.sqlite_connection.get_cursor()
+    dbconnection.db_conn.init_app(app)
+    cursor = dbconnection.db_conn.get_cursor()
     uname = str(user['username'])
     pword = str(user['password'])
     fname = str(user['firstname'])
     lname = str(user['lastname'])
     cursor.execute('''INSERT INTO Users(Username, Password, Firstname, Lastname) VALUES(?, ?, ?, ?)''', (uname, pword, fname, lname))    
-    dbconnection.sqlite_connection.commit()
-    dbconnection.sqlite_connection.close_connection()
+    dbconnection.db_conn.commit()
+    dbconnection.db_conn.close_connection()
     return json.dumps(user, indent=True)
 
 @app.route('/users/json/update', methods = ['PUT', 'POST'])
 def update_user_json():
     user = request.get_json(force=True)
-    dbconnection.sqlite_connection.init_app(app)
-    cursor = dbconnection.sqlite_connection.get_cursor()
+    dbconnection.db_conn.init_app(app)
+    cursor = dbconnection.db_conn.get_cursor()
     uname = str(user['username'])
     pword = str(user['password'])
     fname = str(user['firstname'])
     lname = str(user['lastname'])
     cursor.execute('''UPDATE Users SET Username = ?, Password = ?, Firstname = ?, Lastname = ? WHERE Id = ? ''', (uname, pword, fname, lname, user['id']))
-    dbconnection.sqlite_connection.commit()
-    dbconnection.sqlite_connection.close_connection()
+    dbconnection.db_conn.commit()
+    dbconnection.db_conn.close_connection()
     return json.dumps(user, indent=True)
 
 @app.route('/users/json/delete', methods = ['DELETE','POST'])
 def delete_user_json():
     user = request.get_json(force = True)
-    dbconnection.sqlite_connection.init_app(app)
-    dbconnection.sqlite_connection.connection.execute('''DELETE FROM Users WHERE Id = ? ''', (user['id'],))
-    dbconnection.sqlite_connection.commit()
-    dbconnection.sqlite_connection.close_connection()
+    dbconnection.db_conn.init_app(app)
+    dbconnection.db_conn.connection.execute('''DELETE FROM Users WHERE Id = ? ''', (user['id'],))
+    dbconnection.db_conn.commit()
+    dbconnection.db_conn.close_connection()
     return "Success!"
 
 @app.route('/logout')
