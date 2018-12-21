@@ -1,0 +1,37 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand text-uppercase" href="/">Flask Starter <span class="label label-success text-capitalize">Free</span></a>
+          </div>
+      
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="navigation">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="#">About</a></li>
+                  <li><a href="#">Features</a></li>
+                  {% if session.logged_in %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="/setting">Setting</a>
+                  </li>
+      
+                  <li> <button type="button" class="btn btn-primary navbar-btn btn-circle"><a href="/logout">Logout</a></button></li>
+              
+                  {% else %}
+                 
+                  <li><button type="button" class="btn btn-success navbar-btn btn-circle"><a href="/signin">Sign in</a></button>&nbsp;</li>
+                  <li> <button type="button" class="btn btn-primary navbar-btn btn-circle"><a href="/users/newuser">Sign up</a></button></li>
+              
+                  {% endif %}
+
+                 
+              </ul>
+          </div>
+        </div>
+      </nav>

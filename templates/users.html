@@ -1,0 +1,101 @@
+<!doctype html>
+<head>
+   {% include 'includes/_assets.html' %}  
+</head>
+<html>
+   <body>
+      <div class="wrapper">
+         {% include 'includes/_navbar.html' %}
+         <header class="header">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-7 col-md-offset-1">
+                     <h2 class="h1 page-header">Discover more about features.</h2>
+                     <table class="table table-hover">
+                        <thead>
+                           <tr>
+                              <th>ID</th>
+                              <th>Username</th>
+                              <th>Password</th>
+                              <th>Firstname</th>
+                              <th>Lastname</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {% for user in result %}
+                           <tr>
+                              <td> {{ user['id'] }} </td>
+                              <td> {{ user['username'] }} </td>
+                              <td> {{ user['password'] }} </td>
+                              <td> {{ user['firstname'] }} </td>
+                              <td> {{ user['lastname'] }} </td>
+                              <td><a class="btn btn-primary" href="{{ url_for('edit_user', id = user['id']) }}">Edit</a></td>
+                           </tr>
+                           {% endfor %}
+                           <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td><a class="btn btn-primary" href="{{ url_for('new_user') }}">Add new</a></td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <div class="col-md-3 col-md-offset-1 text-center mt-100 mb-100">
+                     <div class="phone1">
+                        <img class="img-responsive img-rounded" src="https://sourcedexter.com/wp-content/uploads/2017/09/flask-python.png">
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </header>
+         <section class="section">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-1 col-md-offset-1 text-center mt-100 mb-100">
+                  </div>
+                  <div class="col-md-8 col-md-offset-1">
+                     <div class="content">
+                        <div class="pull-middle">
+                           <h2 class="h1 page-header">Discover more about features.</h2>
+                           <ul class="media-list">
+                              <li class="media">
+                                 <a class="media-left" href="#">
+                                 <span class="glyphicon glyphicon-cloud icon text-success"></span>
+                                 </a>
+                                 <div class="media-body">
+                                    <h3 class="media-heading">Praesent porttitor urna ut enim.</h3>
+                                    <p>Maecenas vitae ex iaculis, efficitur est eu, fermentum quam.</p>
+                                 </div>
+                              </li>
+                              <li class="media">
+                                 <a class="media-left" href="#">
+                                 <span class="glyphicon glyphicon-lock icon text-success"></span>
+                                 </a>
+                                 <div class="media-body">
+                                    <h3 class="media-heading">Cras consequat est et elit.</h3>
+                                    <p>Integer suscipit massa at tellus semper, at aliquam ante bibendum.</p>
+                                 </div>
+                              </li>
+                              <li class="media">
+                                 <a class="media-left" href="#">
+                                 <span class="glyphicon glyphicon-user icon text-success"></span>
+                                 </a>
+                                 <div class="media-body">
+                                    <h3 class="media-heading">Aenean vel enim quis dui blandit.</h3>
+                                    <p>Maecenas vitae ex iaculis, efficitur est eu, fermentum quam.</p>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+         {% include 'includes/_footer.html' %}
+      </div>
+   </body>
+</html>
